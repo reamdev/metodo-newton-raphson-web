@@ -117,24 +117,10 @@ function evaluateFunction(expression, x) {
 
 // Actualizar la visualización de iteraciones
 function updateIterationsDisplay() {
-  const container = document.getElementById("iterations");
-  container.innerHTML = "";
-
   const tableContainer = document.querySelector("#iteracciones-table tbody");
   tableContainer.innerHTML = "";
 
   iterationsData.forEach((iter) => {
-    /*const div = document.createElement("div");
-    div.style.padding = "8px";
-    div.style.borderBottom = "1px solid #eee";
-    div.innerHTML = `
-      <strong>Iteración ${iter.n}:</strong><br>
-      x<sub>${iter.n}</sub> = ${iter.xn.toFixed(6)}<br>
-      f(x) = ${iter.fxn.toFixed(6)}<br>
-      f'(x) = ${iter.dfxn.toFixed(6)}<br>
-      Error = ${iter.error.toFixed(6)}
-    `;
-    container.appendChild(div);*/
     tableContainer.innerHTML += `
       <tr>
         <td style="text-align: center;">${iter.n}</td>
@@ -240,7 +226,6 @@ function updateChart(xMin, xMax) {
 function reset() {
   iterationsData = [];
   derivative = "";
-  document.getElementById("iterations").innerHTML = "";
   document.querySelector("#iteracciones-table tbody").innerHTML = `
     <tr>
       <td colspan="5" style="text-align: center;">Sin datos</td>
