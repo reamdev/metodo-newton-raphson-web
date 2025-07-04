@@ -14,8 +14,9 @@ function runNewton() {
   // Calcular derivada exacta
   const func = cleanLatexExpression(functionField.latex());
   derivative = calculateExactDerivative(func);
-  document.getElementById("derivative-text").textContent =
-    formatDerivative(derivative);
+  const latexCont = document.getElementById("derivative-text");
+  latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
+  runMathRender(latexCont);
 
   // Configurar rangos del gráfico
   const x0 = parseFloat(document.getElementById("x0").value);
@@ -43,7 +44,6 @@ function runNewton() {
     const xn = lastX - fx / dfx;
     const error = Math.abs(xn - lastX);
 
-    debugger;
     iterationsData.push({
       n: iterationsData.length + 1,
       xn: xn,
@@ -120,18 +120,30 @@ function updateIterationsDisplay() {
   const container = document.getElementById("iterations");
   container.innerHTML = "";
 
+  const tableContainer = document.querySelector("#iteracciones-table tbody");
+  tableContainer.innerHTML = "";
+
   iterationsData.forEach((iter) => {
-    const div = document.createElement("div");
+    /*const div = document.createElement("div");
     div.style.padding = "8px";
     div.style.borderBottom = "1px solid #eee";
     div.innerHTML = `
-          <strong>Iteración ${iter.n}:</strong><br>
-          x<sub>${iter.n}</sub> = ${iter.xn.toFixed(6)}<br>
-          f(x) = ${iter.fxn.toFixed(6)}<br>
-          f'(x) = ${iter.dfxn.toFixed(6)}<br>
-          Error = ${iter.error.toFixed(6)}
-        `;
-    container.appendChild(div);
+      <strong>Iteración ${iter.n}:</strong><br>
+      x<sub>${iter.n}</sub> = ${iter.xn.toFixed(6)}<br>
+      f(x) = ${iter.fxn.toFixed(6)}<br>
+      f'(x) = ${iter.dfxn.toFixed(6)}<br>
+      Error = ${iter.error.toFixed(6)}
+    `;
+    container.appendChild(div);*/
+    tableContainer.innerHTML += `
+      <tr>
+        <td style="text-align: center;">${iter.n}</td>
+        <td>${iter.xn.toFixed(6)}</td>
+        <td>${iter.fxn.toFixed(6)}</td>
+        <td>${iter.dfxn.toFixed(6)}</td>
+        <td>${iter.error.toFixed(6)}</td>
+      </tr>
+    `;
   });
 }
 
@@ -188,6 +200,7 @@ function updateChart(xMin, xMax) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       scales: {
         x: {
           type: "linear",
@@ -228,6 +241,11 @@ function reset() {
   iterationsData = [];
   derivative = "";
   document.getElementById("iterations").innerHTML = "";
+  document.querySelector("#iteracciones-table tbody").innerHTML = `
+    <tr>
+      <td colspan="5" style="text-align: center;">Sin datos</td>
+    </tr>
+  `;
 
   if (newtonChart) {
     newtonChart.destroy();
@@ -247,6 +265,16 @@ window.addEventListener("load", function () {
 function updateDerivative() {
   const func = cleanLatexExpression(functionField.latex());
   derivative = calculateExactDerivative(func);
-  document.getElementById("derivative-text").textContent =
-    formatDerivative(derivative);
+  const latexCont = document.getElementById("derivative-text");
+  latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
+  runMathRender(latexCont);
+}
+
+function runMathRender(container) {
+  renderMathInElement(container, {
+    delimiters: [
+      { left: "\\(", right: "\\)", display: false },
+      { left: "\\[", right: "\\]", display: true },
+    ],
+  });
 }
