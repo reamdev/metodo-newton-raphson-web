@@ -13,9 +13,21 @@ function runNewton() {
 
   // Calcular derivada exacta
   const func = cleanLatexExpression(functionField.latex());
+  if (func.trim() === '') {
+    document.getElementById("derivative-text").textContent = '';
+    alert('Ingrese una funcion');
+    return;
+  }
+
   derivative = calculateExactDerivative(func);
+  console.log(derivative);
+
   const latexCont = document.getElementById("derivative-text");
-  latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
+  if (derivative == 'No se pudo calcular la derivada') {
+    latexCont.textContent = derivative;
+  } else {
+    latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
+  }
   runMathRender(latexCont);
 
   // Configurar rangos del gráfico
@@ -26,7 +38,7 @@ function runNewton() {
 
   // Ejecutar iteraciones
   let i = 0;
-  // for (let i = 0; i < iterationsCount; i++) {
+  let errorExecution = false;
   while (true) {
     const lastX =
       iterationsData.length > 0
@@ -55,11 +67,20 @@ function runNewton() {
     if (Math.abs(xn - lastX) < tolerancia) {
       break;
     }
+
+    if (i >= 10000) {
+      errorExecution = true;
+      alert('Hubo un error');
+      break;
+    }
+
     i++;
   }
 
-  updateIterationsDisplay();
-  updateChart(xMin, xMax);
+  if (!errorExecution) {
+    updateIterationsDisplay();
+    updateChart(xMin, xMax);
+  }
 }
 
 // Limpiar expresión LaTeX para nerdamer
@@ -251,7 +272,11 @@ function updateDerivative() {
   const func = cleanLatexExpression(functionField.latex());
   derivative = calculateExactDerivative(func);
   const latexCont = document.getElementById("derivative-text");
-  latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
+  if (derivative == 'No se pudo calcular la derivada') {
+    latexCont.textContent = derivative;
+  } else {
+    latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
+  }
   runMathRender(latexCont);
 }
 
@@ -262,4 +287,63 @@ function runMathRender(container) {
       { left: "\\[", right: "\\]", display: true },
     ],
   });
+}
+
+let visible = false;
+document.getElementById("btn-teclado").addEventListener("click", () => {
+  const teclado = document.getElementById("teclado-flotante");
+  if (visible) {
+    teclado.style.display = "none";
+  } else {
+    teclado.style.display = "block";
+  }
+  visible = !visible;
+});
+
+function insertar(tipo) {
+  const lastLatex = functionField.latex();
+  const lastChar = lastLatex.trim().slice(-1);
+
+  switch (tipo) {
+    case "sqrt":
+      functionField.cmd("\\sqrt");
+      break;
+    case "^":
+      if (
+        lastLatex === "" ||
+        ["+", "-", "*", "/", "^", "(", "="].includes(lastChar)
+      ) {
+        functionField.write("x");
+        functionField.keystroke("Right");
+        functionField.keystroke("^");
+      } else {
+        functionField.cmd("^");
+      }
+      break;
+    case "frac":
+      functionField.cmd("\\frac");
+      break;
+    case "pi":
+      functionField.cmd("\\pi");
+      break;
+    case "e":
+      functionField.write("e");
+      break;
+    case "sin":
+    case "cos":
+    case "tan":
+      functionField.cmd(`\\${tipo}`);
+      functionField.write("()");
+      functionField.keystroke("Left");
+      break;
+    case "(":
+    case ")":
+    case "+":
+    case "-":
+    case "*":
+    case "/":
+      functionField.write(tipo);
+      break;
+  }
+  functionField.focus();
 }

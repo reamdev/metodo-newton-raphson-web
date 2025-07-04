@@ -3,9 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <title>Método de Newton con Derivadas Exactas</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.css" />
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="shortcut icon" href="./resources/favicon.ico" type="image/x-icon">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.css"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link
+      rel="shortcut icon"
+      href="./resources/favicon.ico"
+      type="image/x-icon"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.6.0/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.12/nerdamer.core.js"></script>
@@ -13,13 +20,19 @@
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.12/Algebra.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.12/Extra.js"></script>
     <!-- CSS de KaTeX -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    />
     <!-- JS de KaTeX -->
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="header">
@@ -29,11 +42,15 @@
     <!-- <div class="container"> -->
     <main>
       <div class="input-section">
-        <p style="font-weight: bold;">Función</p>
+        <p style="font-weight: bold">Función</p>
         <div id="function-field" class="mq-editable-field">x^3 + 3*x^2 - 6</div>
 
-        <p style="font-weight: bold;">Derivada:</p>
-        <div id="derivative-display" class="function-display" style="text-align: center;">
+        <p style="font-weight: bold">Derivada:</p>
+        <div
+          id="derivative-display"
+          class="function-display"
+          style="text-align: center"
+        >
           <p id="derivative-text"></p>
         </div>
 
@@ -65,6 +82,10 @@
           <button class="btn btn-start" onclick="runNewton()">Calcular</button>
           <button class="btn btn-reset" onclick="reset()">Reiniciar</button>
         </div>
+
+        <button id="btn-teclado" class="btn btn-img">
+          <img src="resources/teclado.webp" alt="teclado">
+        </button>
       </div>
 
       <div class="graph-section">
@@ -85,10 +106,26 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="5" style="text-align: center;">Sin datos</td>
+              <td colspan="5" style="text-align: center">Sin datos</td>
             </tr>
           </tbody>
         </table>
+      </div>
+      <div id="teclado-flotante">
+        <button onclick="insertar('sqrt')">√</button>
+        <button onclick="insertar('^')">xⁿ</button>
+        <!-- <button onclick="insertar('frac')">a⁄b</button> -->
+        <button onclick="insertar('sin')">sin</button>
+        <button onclick="insertar('cos')">cos</button>
+        <button onclick="insertar('tan')">tan</button>
+        <!-- <button onclick="insertar('pi')">π</button>
+        <button onclick="insertar('e')">e</button>
+        <button onclick="insertar('(')">(</button>
+        <button onclick="insertar(')')">)</button>
+        <button onclick="insertar('+')">+</button>
+        <button onclick="insertar('-')">−</button>
+        <button onclick="insertar('*')">×</button>
+        <button onclick="insertar('/')">÷</button> -->
       </div>
     </main>
 

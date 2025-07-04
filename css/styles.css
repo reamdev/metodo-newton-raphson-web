@@ -24,7 +24,8 @@ main {
   display: flex;
 }
 
-.input-section, .iteracciones-section {
+.input-section,
+.iteracciones-section {
   width: 250px;
   height: 100%;
   padding: 20px 10px;
@@ -32,6 +33,7 @@ main {
 
 .input-section {
   border-right: 1px solid #ddd;
+  position: relative;
 }
 
 .graph-section {
@@ -79,7 +81,7 @@ label {
 
 .input:focus {
   outline: none;
-  border-color: #007BFF;
+  border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
 }
 
@@ -173,10 +175,10 @@ label {
 
 #iteracciones-table td:first-child {
   font-weight: 500;
-  color: #007BFF;
+  color: #007bff;
 }
 
-#iteracciones-table tbody tr:last-of-type:nth-child(n+2) {
+#iteracciones-table tbody tr:last-of-type:nth-child(n + 2) {
   background-color: #e1f7e0;
 }
 
@@ -186,4 +188,42 @@ label {
   overflow-y: auto;
   border: 1px solid #eee;
   padding: 10px 0;
+}
+
+#teclado-flotante {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #aaa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  z-index: 999;
+  bottom: 20px;
+  left: 94px;
+}
+
+#teclado-flotante button {
+  margin: 4px;
+  padding: 8px 12px;
+  font-size: 18px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #f7f7f7;;
+}
+
+#teclado-flotante button:hover {
+  background: #ddd;
+}
+
+.btn-img {
+  width: 70px;
+  padding: 5px;
+  position: absolute;
+  bottom: 20px;
+}
+
+.btn-img img {
+  width: 100%;
 }
