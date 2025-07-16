@@ -7,12 +7,8 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.css"
     />
-    <!-- <link rel="stylesheet" href="./css/styles.css" /> -->
-    <link
-      rel="shortcut icon"
-      href="./resources/favicon.ico"
-      type="image/x-icon"
-    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="shortcut icon" href="./resources/favicon.ico" type="image/x-icon" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.6.0/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.12/nerdamer.core.js"></script>
@@ -29,18 +25,27 @@
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
   </head>
-  <body class="bg-white text-black dark:bg-gray-800 dark:text-white">
+  <body class="bg-white text-black dark:bg-gray-800 dark:text-white h-screen overflow-hidden">
     <header class="flex items-center justify-between px-6 py-2 bg-gray-100 dark:bg-gray-800 shadow-md">
       <div class="w-12 h-12 flex-shrink-0">
         <img src="resources/EscudoEscuela.png" alt="Escudo escuela" class="w-full h-full object-contain"/>
       </div>
       <h1 class="text-center text-xl md:text-2xl font-bold text-gray-800 dark:text-white flex-1">Método de Newton con Cálculo Exacto de Derivadas</h1>
       <div class="flex items-center justify-end">
-        <label for="theme-toggle" class="inline-flex items-center cursor-pointer">
-          <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">🌙</span>
-          <input type="checkbox" id="theme-toggle" class="sr-only">
-          <div class="w-10 h-5 bg-gray-300 dark:bg-gray-600 rounded-full relative transition">
-            <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition transform"></div>
+        <label class="flex items-center cursor-pointer">
+          <!-- Sol y Luna -->
+          <span class="text-lg text-yellow-500 dark:text-gray-200">
+            <span class="block dark:hidden">☀️</span>
+            <span class="hidden dark:block">🌙</span>
+          </span>
+
+          <!-- Input invisible y peer -->
+          <input id="theme-toggle" type="checkbox" class="sr-only peer">
+
+          <!-- Switch container -->
+          <div class="ml-2 w-10 h-5 bg-gray-300 dark:bg-gray-600 rounded-full relative transition">
+            <!-- La bolita -->
+            <div id="theme-white-ball" class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-5"></div>
           </div>
         </label>
       </div>
@@ -56,9 +61,30 @@
       <!-- Columnas -->
       <div id="main-layout" class="flex gap-4">
         <!-- Columna 1: Funcion -->
-        <div class="basis-[20%] shrink-0 space-y-4">
-          <p class="font-semibold">Función</p>
-          <div id="function-field" class="mq-editable-field border border-gray-300 dark:border-gray-600 p-2 rounded w-full">x^3 + 3*x^2 - 6</div>
+        <div class="basis-[20%] shrink-0 flex flex-col h-full space-y-4 relative">
+          <div class="flex items-center space-x-2">
+            <p class="font-semibold mb-1">Función</p>
+          </div>
+          <div class="flex items-stretch space-x-2 relative">
+            <div id="function-field" class="mq-editable-field border border-gray-300 dark:border-gray-600 p-2 rounded w-full caret-black dark:caret-white">
+              x^3 + 3*x^2 - 6
+            </div>
+            <button id="btn-teclado" class="rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 shadow transition px-3" title="Mostrar teclado">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-800 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75h15a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5zM6 10.5h.008M9 10.5h.008M12 10.5h.008M15 10.5h.008M18 10.5h.008M6 13.5h12" />
+              </svg>
+            </button>
+
+            <!-- Este es el teclado flotante que se mostrará a la derecha -->
+            <div id="teclado-flotante"
+                class="hidden absolute left-full ml-2 top-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-2 rounded shadow flex flex-row gap-2 z-50 h-full items-center">
+              <button onclick="insertar('sqrt')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600">√</button>
+              <button onclick="insertar('^')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600">xⁿ</button>
+              <button onclick="insertar('sin')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600">sin</button>
+              <button onclick="insertar('cos')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600">cos</button>
+              <button onclick="insertar('tan')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-600">tan</button>
+            </div>
+          </div>
 
           <p class="font-semibold">Derivada:</p>
           <div id="derivative-display" class="text-center p-2 border border-gray-300 dark:border-gray-600 rounded">
@@ -79,12 +105,6 @@
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" onclick="runNewton()">Calcular</button>
             <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded" onclick="reset()">Reiniciar</button>
           </div>
-
-          <button id="btn-teclado" class="mt-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-700 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75h15a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5zM6 10.5h.008M9 10.5h.008M12 10.5h.008M15 10.5h.008M18 10.5h.008M6 13.5h12" />
-            </svg>
-          </button>
         </div>
 
         <!-- Columna 2: Grafico -->
@@ -112,23 +132,6 @@
             </tbody>
           </table>
         </div>
-      </div>
-
-      <div id="teclado-flotante">
-        <button onclick="insertar('sqrt')">√</button>
-        <button onclick="insertar('^')">xⁿ</button>
-        <!-- <button onclick="insertar('frac')">a⁄b</button> -->
-        <button onclick="insertar('sin')">sin</button>
-        <button onclick="insertar('cos')">cos</button>
-        <button onclick="insertar('tan')">tan</button>
-        <!-- <button onclick="insertar('pi')">π</button>
-        <button onclick="insertar('e')">e</button>
-        <button onclick="insertar('(')">(</button>
-        <button onclick="insertar(')')">)</button>
-        <button onclick="insertar('+')">+</button>
-        <button onclick="insertar('-')">−</button>
-        <button onclick="insertar('*')">×</button>
-        <button onclick="insertar('/')">÷</button> -->
       </div>
     </main>
 

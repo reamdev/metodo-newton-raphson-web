@@ -297,7 +297,7 @@ document.getElementById("btn-teclado").addEventListener("click", () => {
   if (visible) {
     teclado.style.display = "none";
   } else {
-    teclado.style.display = "block";
+    teclado.style.display = "flex";
   }
   visible = !visible;
 });
@@ -378,14 +378,23 @@ btnToggle.addEventListener("click", () => {
 
 // Cambiar el tema al hacer toggle
 const toggle = document.getElementById("theme-toggle");
-toggle.addEventListener("change", () => {
-  document.documentElement.classList.toggle("dark");
+const html = document.documentElement;
 
-  // ⚠️ Redibujar el gráfico con el nuevo tema
-  if (newtonChart) {
-    updateChart(
-      parseFloat(document.getElementById("x0").value) - 3,
-      parseFloat(document.getElementById("x0").value) + 3
-    );
+// Aplicar tema guardado
+if (localStorage.getItem("theme") === "dark") {
+  html.classList.add("dark");
+  document.getElementById("theme-white-ball").classList.add("translate-x-5");
+  toggle.checked = true;
+}
+
+toggle.addEventListener("change", () => {
+  if (toggle.checked) {
+    html.classList.add("dark");
+    document.getElementById("theme-white-ball").classList.add("translate-x-5");
+    localStorage.setItem("theme", "dark");
+  } else {
+    html.classList.remove("dark");
+    document.getElementById("theme-white-ball").classList.remove("translate-x-5");
+    localStorage.setItem("theme", "light");
   }
 });
