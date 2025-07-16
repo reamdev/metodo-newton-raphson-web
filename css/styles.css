@@ -6,7 +6,47 @@
   border-left: 1px solid white !important;
 }
 
-#iteracciones-table tbody tr:last-child {
+#iteracciones-table tbody tr:last-of-type:nth-child(n + 2) {
   background-color: #d4edda; /* Verde pastel */
   color: #000;
+}
+
+/* Scroll personalizado solo para #col-iteracciones */
+#col-iteracciones::-webkit-scrollbar {
+  width: 10px;
+}
+
+#col-iteracciones::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+#col-iteracciones::-webkit-scrollbar-thumb {
+  background: #233d6e; /* Verde pastel */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+#col-iteracciones::-webkit-scrollbar-thumb:hover {
+  background: #2f5294;
+}
+
+/* Dark mode */
+html.dark #col-iteracciones::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+html.dark #col-iteracciones::-webkit-scrollbar-thumb {
+  background: #2f5294;
+}
+
+/* Firefox */
+#col-iteracciones {
+  scrollbar-width: thin;
+  scrollbar-color: #233d6e #f0f0f0;
+}
+
+html.dark #col-iteracciones {
+  scrollbar-color: #2f5294 #2a2a2a;
 }

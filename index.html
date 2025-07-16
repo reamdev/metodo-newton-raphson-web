@@ -54,7 +54,7 @@
     <main class="bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen px-4 py-6">
       <div class="mb-4 text-right">
         <button id="toggle-iteracciones" class="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition">
-          Ocultar
+          Ocultar Iteraciones
         </button>
       </div>
 
@@ -113,24 +113,46 @@
         </div>
 
         <!-- Columna 3: Funcion -->
-        <div id="col-iteracciones" class="basis-[24%] shrink-0 bg-white dark:bg-gray-800 rounded shadow p-4 overflow-auto transition-all duration-300">
-          <h3 class="text-lg font-bold mb-2">Interacciones</h3>
-          <table id="iteracciones-table" class="w-full text-sm border border-collapse border-gray-300 dark:border-gray-700">
-            <thead class="bg-gray-100 dark:bg-gray-800">
-              <tr>
-                <th class="border px-2 py-1">N°</th>
-                <th class="border px-2 py-1">x1</th>
-                <th class="border px-2 py-1">f(x)</th>
-                <th class="border px-2 py-1">f'(x)</th>
-                <th class="border px-2 py-1">Error</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="5" class="text-center border py-2">Sin datos</td>
-              </tr>
-            </tbody>
-          </table>
+        <div id="col-iteracciones" class="basis-[24%] shrink-0 bg-white dark:bg-gray-800 rounded shadow p-4 overflow-auto transition-all duration-300 flex flex-col h-[500px]">
+          <!-- Mitad superior: Interacciones -->
+          <div class="flex-1 overflow-auto">
+            <h3 class="text-lg font-bold mb-2">Interacciones</h3>
+            <table id="iteracciones-table" class="w-full text-sm border border-collapse border-gray-300 dark:border-gray-700">
+              <thead class="bg-gray-100 dark:bg-gray-800">
+                <tr>
+                  <th class="border px-2 py-1">N°</th>
+                  <th class="border px-2 py-1">x₁</th>
+                  <th class="border px-2 py-1">f(x)</th>
+                  <th class="border px-2 py-1">f'(x)</th>
+                  <th class="border px-2 py-1">Error</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="text-center border py-2">Sin datos</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Mitad inferior: Desarrolladores -->
+          <div class="mt-4 p-2 border-t border-gray-300 dark:border-gray-600">
+            <h3 class="text-md font-semibold mb-2">Desarrolladores</h3>
+            <div class="flex justify-between text-sm">
+              <!-- Primera columna (3 desarrolladores) -->
+              <ul class="space-y-1">
+                <li>👨‍💻 Rafael Arriaga</li>
+                <li>👩‍💻 Valeria Cardenas</li>
+                <li>👨‍💻 Renzo Lopez</li>
+              </ul>
+
+              <!-- Segunda columna (2 desarrolladores) -->
+              <ul class="space-y-1">
+                <li>👨‍💻 Angel Marco</li>
+                <li>👨‍💻 Cristian Asensios</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </main>
