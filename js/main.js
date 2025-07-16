@@ -13,9 +13,9 @@ function runNewton() {
 
   // Calcular derivada exacta
   const func = cleanLatexExpression(functionField.latex());
-  if (func.trim() === '') {
-    document.getElementById("derivative-text").textContent = '';
-    alert('Ingrese una funcion');
+  if (func.trim() === "") {
+    document.getElementById("derivative-text").textContent = "";
+    alert("Ingrese una funcion");
     return;
   }
 
@@ -23,7 +23,7 @@ function runNewton() {
   console.log(derivative);
 
   const latexCont = document.getElementById("derivative-text");
-  if (derivative == 'No se pudo calcular la derivada') {
+  if (derivative == "No se pudo calcular la derivada") {
     latexCont.textContent = derivative;
   } else {
     latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
@@ -70,7 +70,7 @@ function runNewton() {
 
     if (i >= 10000) {
       errorExecution = true;
-      alert('Hubo un error');
+      alert("Hubo un error");
       break;
     }
 
@@ -144,11 +144,11 @@ function updateIterationsDisplay() {
   iterationsData.forEach((iter) => {
     tableContainer.innerHTML += `
       <tr>
-        <td style="text-align: center;">${iter.n}</td>
-        <td>${iter.xn.toFixed(6)}</td>
-        <td>${iter.fxn.toFixed(6)}</td>
-        <td>${iter.dfxn.toFixed(6)}</td>
-        <td>${iter.error.toFixed(6)}</td>
+        <td class="text-center border py-2">${iter.n}</td>
+        <td class="border py-2">${iter.xn.toFixed(6)}</td>
+        <td class="border py-2">${iter.fxn.toFixed(6)}</td>
+        <td class="border py-2">${iter.dfxn.toFixed(6)}</td>
+        <td class="border py-2">${iter.error.toFixed(6)}</td>
       </tr>
     `;
   });
@@ -247,9 +247,11 @@ function updateChart(xMin, xMax) {
 function reset() {
   iterationsData = [];
   derivative = "";
+  document.getElementById("derivative-text").textContent = "Sin Calcular";
+  document.getElementById("derivative-text");
   document.querySelector("#iteracciones-table tbody").innerHTML = `
     <tr>
-      <td colspan="5" style="text-align: center;">Sin datos</td>
+      <td colspan="5" class="text-center border py-2">Sin datos</td>
     </tr>
   `;
 
@@ -272,7 +274,7 @@ function updateDerivative() {
   const func = cleanLatexExpression(functionField.latex());
   derivative = calculateExactDerivative(func);
   const latexCont = document.getElementById("derivative-text");
-  if (derivative == 'No se pudo calcular la derivada') {
+  if (derivative == "-") {
     latexCont.textContent = derivative;
   } else {
     latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
@@ -347,3 +349,43 @@ function insertar(tipo) {
   }
   functionField.focus();
 }
+
+const btnToggle = document.getElementById("toggle-iteracciones");
+const colIteracciones = document.getElementById("col-iteracciones");
+
+let visibleColumn = true;
+
+btnToggle.addEventListener("click", () => {
+  visibleColumn = !visibleColumn;
+  colIteracciones.classList.toggle("hidden", !visibleColumn);
+  btnToggle.textContent = visibleColumn
+    ? "Ocultar Iteraciones"
+    : "Mostrar Iteraciones";
+
+  setTimeout(() => {
+    const canvas = document.getElementById("newton-chart");
+
+    // 👇 Forzar el navegador a recalcular layout
+    canvas.style.display = "none";
+    canvas.offsetHeight; // ← Forzar reflow
+    canvas.style.display = "block";
+
+    if (newtonChart) {
+      newtonChart.resize();
+    }
+  }, 350); // Empareja con el transition-all (300ms)
+});
+
+// Cambiar el tema al hacer toggle
+const toggle = document.getElementById("theme-toggle");
+toggle.addEventListener("change", () => {
+  document.documentElement.classList.toggle("dark");
+
+  // ⚠️ Redibujar el gráfico con el nuevo tema
+  if (newtonChart) {
+    updateChart(
+      parseFloat(document.getElementById("x0").value) - 3,
+      parseFloat(document.getElementById("x0").value) + 3
+    );
+  }
+});

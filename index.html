@@ -7,7 +7,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.css"
     />
-    <link rel="stylesheet" href="./css/styles.css" />
+    <!-- <link rel="stylesheet" href="./css/styles.css" /> -->
     <link
       rel="shortcut icon"
       href="./resources/favicon.ico"
@@ -24,93 +24,96 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
     />
+
     <!-- JS de KaTeX -->
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
-      rel="stylesheet"
-    />
   </head>
-  <body>
-    <div id="header">
-      <h1>Método de Newton con Cálculo Exacto de Derivadas</h1>
-    </div>
+  <body class="bg-white text-black dark:bg-gray-800 dark:text-white">
+    <header class="flex items-center justify-between px-6 py-2 bg-gray-100 dark:bg-gray-800 shadow-md">
+      <div class="w-12 h-12 flex-shrink-0">
+        <img src="resources/EscudoEscuela.png" alt="Escudo escuela" class="w-full h-full object-contain"/>
+      </div>
+      <h1 class="text-center text-xl md:text-2xl font-bold text-gray-800 dark:text-white flex-1">Método de Newton con Cálculo Exacto de Derivadas</h1>
+      <div class="flex items-center justify-end">
+        <label for="theme-toggle" class="inline-flex items-center cursor-pointer">
+          <span class="mr-2 text-sm text-gray-700 dark:text-gray-300">🌙</span>
+          <input type="checkbox" id="theme-toggle" class="sr-only">
+          <div class="w-10 h-5 bg-gray-300 dark:bg-gray-600 rounded-full relative transition">
+            <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition transform"></div>
+          </div>
+        </label>
+      </div>
+    </header>
 
-    <!-- <div class="container"> -->
-    <main>
-      <div class="input-section">
-        <p style="font-weight: bold">Función</p>
-        <div id="function-field" class="mq-editable-field">x^3 + 3*x^2 - 6</div>
-
-        <p style="font-weight: bold">Derivada:</p>
-        <div
-          id="derivative-display"
-          class="function-display"
-          style="text-align: center"
-        >
-          <p id="derivative-text"></p>
-        </div>
-
-        <div>
-          <label for="x0">Punto inicial (x₀):</label>
-          <input
-            class="input"
-            type="number"
-            id="x0"
-            value="1"
-            step="0.1"
-            style="width: 80px; padding: 5px"
-          />
-        </div>
-
-        <div>
-          <label for="tolerancia">Tolerancia:</label>
-          <input
-            class="input"
-            type="number"
-            id="tolerancia"
-            value="0.000001"
-            step="0.000001"
-            style="width: 60px; padding: 5px"
-          />
-        </div>
-
-        <div id="buttons">
-          <button class="btn btn-start" onclick="runNewton()">Calcular</button>
-          <button class="btn btn-reset" onclick="reset()">Reiniciar</button>
-        </div>
-
-        <button id="btn-teclado" class="btn btn-img">
-          <img src="resources/teclado.webp" alt="teclado">
+    <main class="bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen px-4 py-6">
+      <div class="mb-4 text-right">
+        <button id="toggle-iteracciones" class="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition">
+          Ocultar
         </button>
       </div>
 
-      <div class="graph-section">
-        <canvas id="newton-chart"></canvas>
+      <!-- Columnas -->
+      <div id="main-layout" class="flex gap-4">
+        <!-- Columna 1: Funcion -->
+        <div class="basis-[20%] shrink-0 space-y-4">
+          <p class="font-semibold">Función</p>
+          <div id="function-field" class="mq-editable-field border border-gray-300 dark:border-gray-600 p-2 rounded w-full">x^3 + 3*x^2 - 6</div>
+
+          <p class="font-semibold">Derivada:</p>
+          <div id="derivative-display" class="text-center p-2 border border-gray-300 dark:border-gray-600 rounded">
+            <p id="derivative-text"></p>
+          </div>
+
+          <div class="space-y-2">
+            <label for="x0" class="block font-medium">Punto inicial (x₀):</label>
+            <input class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded px-2 py-1 w-full" type="number" id="x0" value="1" step="0.1" />
+          </div>
+
+          <div class="space-y-2">
+            <label for="tolerancia" class="block font-medium">Tolerancia:</label>
+            <input class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded px-2 py-1 w-full" type="number" id="tolerancia" value="0.000001" step="0.000001" />
+          </div>
+
+          <div id="space-x-4">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" onclick="runNewton()">Calcular</button>
+            <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded" onclick="reset()">Reiniciar</button>
+          </div>
+
+          <button id="btn-teclado" class="mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-700 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 6.75h15a1.5 1.5 0 0 1 1.5 1.5v7.5a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-7.5a1.5 1.5 0 0 1 1.5-1.5zM6 10.5h.008M9 10.5h.008M12 10.5h.008M15 10.5h.008M18 10.5h.008M6 13.5h12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Columna 2: Grafico -->
+        <div id="col-grafico" class="grow relative h-[500px] bg-white dark:bg-gray-800 rounded shadow p-4 transition-all duration-300">
+          <canvas id="newton-chart" class="absolute top-0 left-0 w-full h-full"></canvas>
+        </div>
+
+        <!-- Columna 3: Funcion -->
+        <div id="col-iteracciones" class="basis-[24%] shrink-0 bg-white dark:bg-gray-800 rounded shadow p-4 overflow-auto transition-all duration-300">
+          <h3 class="text-lg font-bold mb-2">Interacciones</h3>
+          <table id="iteracciones-table" class="w-full text-sm border border-collapse border-gray-300 dark:border-gray-700">
+            <thead class="bg-gray-100 dark:bg-gray-800">
+              <tr>
+                <th class="border px-2 py-1">N°</th>
+                <th class="border px-2 py-1">x1</th>
+                <th class="border px-2 py-1">f(x)</th>
+                <th class="border px-2 py-1">f'(x)</th>
+                <th class="border px-2 py-1">Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5" class="text-center border py-2">Sin datos</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="iteracciones-section">
-        <h3>Interacciones</h3>
-        <table id="iteracciones-table">
-          <thead>
-            <tr>
-              <th>N°</th>
-              <th>x1</th>
-              <th>f(x)</th>
-              <th>f'(x)</th>
-              <th>Error</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="5" style="text-align: center">Sin datos</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <div id="teclado-flotante">
         <button onclick="insertar('sqrt')">√</button>
         <button onclick="insertar('^')">xⁿ</button>
@@ -132,5 +135,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.min.js"></script>
     <script src="./js/main.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
+    <!-- Tailwind -->
   </body>
 </html>
