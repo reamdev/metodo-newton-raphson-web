@@ -1,6 +1,8 @@
 // Configuración de MathQuill
 const MQ = MathQuill.getInterface(2);
 const functionField = MQ.MathField(document.getElementById("function-field"));
+const MENSAJE_DERIVADA_NO_CALCULADA = 'Sin Calcular';
+const MENSAJE_DERIVADA_ERROR = '';
 
 // Variables globales
 let newtonChart = null;
@@ -20,7 +22,6 @@ function runNewton() {
   }
 
   derivative = calculateExactDerivative(func);
-  console.log(derivative);
 
   const latexCont = document.getElementById("derivative-text");
   if (derivative == "No se pudo calcular la derivada") {
@@ -98,6 +99,22 @@ function cleanLatexExpression(latex) {
     .replace(/([0-9)])([(])/g, "$1*$2"); // 3( → 3*(
 }
 
+function latexExpressPython(latex) {
+  return latex
+    .replace(/\\left|\\right/g, '')        // elimina \left y \right
+    .replace(/\\cdot/g, '*')               // reemplaza multiplicación
+    .replace(/\\times/g, '*')              // otro símbolo de multiplicación
+    .replace(/\\div/g, '/')                // división
+    .replace(/\^/g, '**')                  // potencias
+    .replace(/\\sqrt{([^}]*)}/g, 'sqrt($1)') // raíz cuadrada
+    .replace(/\\frac{([^}]*)}{([^}]*)}/g, '($1)/($2)') // fracciones
+    .replace(/\\sin/g, 'sin')              // trigonometría
+    .replace(/\\cos/g, 'cos')
+    .replace(/\\tan/g, 'tan')
+    .replace(/\\log/g, 'log')
+    .replace(/\\exp/g, 'exp');
+}
+
 // Calcular derivada exacta usando nerdamer
 function calculateExactDerivative(expr) {
   try {
@@ -145,10 +162,10 @@ function updateIterationsDisplay() {
     tableContainer.innerHTML += `
       <tr>
         <td class="text-center border py-2">${iter.n}</td>
-        <td class="border py-2">${iter.xn.toFixed(6)}</td>
-        <td class="border py-2">${iter.fxn.toFixed(6)}</td>
-        <td class="border py-2">${iter.dfxn.toFixed(6)}</td>
-        <td class="border py-2">${iter.error.toFixed(6)}</td>
+        <td class="text-right px-2 border py-2">${iter.xn}</td>
+        <td class="text-right px-2 border py-2">${iter.fxn}</td>
+        <td class="text-right px-2 border py-2">${iter.dfxn}</td>
+        <td class="text-right px-2 border py-2">${iter.error}</td>
       </tr>
     `;
   });
@@ -247,7 +264,7 @@ function updateChart(xMin, xMax) {
 function reset() {
   iterationsData = [];
   derivative = "";
-  document.getElementById("derivative-text").textContent = "Sin Calcular";
+  document.getElementById("derivative-text").textContent = MENSAJE_DERIVADA_NO_CALCULADA;
   document.getElementById("derivative-text");
   document.querySelector("#iteracciones-table tbody").innerHTML = `
     <tr>
@@ -261,6 +278,7 @@ function reset() {
   }
 }
 
+/*
 // Inicialización
 window.addEventListener("load", function () {
   // Mostrar derivada inicial
@@ -269,7 +287,9 @@ window.addEventListener("load", function () {
   // Actualizar derivada cuando cambia la función
   functionField.el().addEventListener("input", updateDerivative);
 });
+*/
 
+/*
 function updateDerivative() {
   const func = cleanLatexExpression(functionField.latex());
   derivative = calculateExactDerivative(func);
@@ -280,7 +300,7 @@ function updateDerivative() {
     latexCont.textContent = `\\( ${formatDerivative(derivative)} \\)`;
   }
   runMathRender(latexCont);
-}
+}*/
 
 function runMathRender(container) {
   renderMathInElement(container, {
@@ -397,4 +417,54 @@ toggle.addEventListener("change", () => {
     document.getElementById("theme-white-ball").classList.remove("translate-x-5");
     localStorage.setItem("theme", "light");
   }
+});
+
+// Conectar con Python
+document.getElementById("btnEnviar").addEventListener("click", () => {
+  const latex = functionField.latex();
+  const funcion = latexExpressPython(latex);
+  const x0 = document.getElementById("x0").value;
+  const tolerancia = document.getElementById("tolerancia").value;
+
+  fetch("/calcular", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      funcion: funcion,
+      x0: x0,
+      tolerancia: tolerancia
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert("Error: " + data.error);
+      console.log("Hubo un problema:", data.error);
+      return;
+    }
+
+    const derivada = data.derivada;
+    const latexCont = document.getElementById("derivative-text");
+    if (derivada == "-") {
+      latexCont.textContent = MENSAJE_DERIVADA_NO_CALCULADA;
+    } else {
+      latexCont.textContent = `\\( ${formatDerivative(derivada)} \\)`;
+      runMathRender(latexCont);
+    }
+
+    iterationsData = data.iteraciones;
+    const xMin = parseFloat(x0) - 3;
+    const xMax = parseFloat(x0) + 3;
+    updateIterationsDisplay();
+    updateChart(xMin, xMax);
+
+    // Aquí puedes poblar la tabla HTML con las iteraciones si deseas
+  })
+  .catch(err => {
+    console.error("Hubo un problema:", err);
+    console.log("Hubo un problema:", err);
+    alert('Hubo un problema: ', err)
+  });
 });

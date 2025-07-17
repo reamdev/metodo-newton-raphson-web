@@ -7,8 +7,8 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.css"
     />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="shortcut icon" href="./resources/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.6.0/math.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.12/nerdamer.core.js"></script>
@@ -28,7 +28,7 @@
   <body class="bg-white text-black dark:bg-gray-800 dark:text-white h-screen overflow-hidden">
     <header class="flex items-center justify-between px-6 py-2 bg-gray-100 dark:bg-gray-800 shadow-md">
       <div class="w-12 h-12 flex-shrink-0">
-        <img src="resources/EscudoEscuela.png" alt="Escudo escuela" class="w-full h-full object-contain"/>
+        <img src="{{ url_for('static', filename='EscudoEscuela.png') }}" alt="Escudo escuela" class="w-full h-full object-contain"/>
       </div>
       <h1 class="text-center text-xl md:text-2xl font-bold text-gray-800 dark:text-white flex-1">Método de Newton con Cálculo Exacto de Derivadas</h1>
       <div class="flex items-center justify-end">
@@ -88,7 +88,7 @@
 
           <p class="font-semibold">Derivada:</p>
           <div id="derivative-display" class="text-center p-2 border border-gray-300 dark:border-gray-600 rounded">
-            <p id="derivative-text"></p>
+            <p id="derivative-text">Sin Calcular</p>
           </div>
 
           <div class="space-y-2">
@@ -102,7 +102,7 @@
           </div>
 
           <div id="space-x-4">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" onclick="runNewton()">Calcular</button>
+            <button id="btnEnviar" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Calcular</button>
             <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded" onclick="reset()">Reiniciar</button>
           </div>
         </div>
@@ -159,7 +159,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathquill/build/mathquill.min.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

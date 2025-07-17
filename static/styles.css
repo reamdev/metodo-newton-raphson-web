@@ -11,6 +11,10 @@
   color: #000;
 }
 
+#iteracciones-table tbody tr:last-of-type:nth-child(n + 2) td {
+  border-color: #2a2a2a;
+}
+
 /* Scroll personalizado solo para #col-iteracciones */
 #col-iteracciones::-webkit-scrollbar {
   width: 10px;
